@@ -80,6 +80,6 @@ bash 'build' do
 end
  
 bash 'install' do
-  code 'make'
+  code 'make install'
   cwd build_dir
 end
