@@ -65,7 +65,7 @@ remote_file "#{build_dir}/minc.tar.gz" do
 end
 
 bash 'unpack' do
-  code 'tar xfz minc.tar.gz --strip-components=11'
+  code 'tar xfz minc.tar.gz --strip-components=1'
   cwd build_dir
 end
 
