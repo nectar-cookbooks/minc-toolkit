@@ -31,9 +31,11 @@ prefix = '/usr/local'
 bin = "#{prefix}/bin"
 if File::exists?("#{bin}/dcm2mnc") then
   log "Minc tools already installed in #{bin}" do
-    level 'info'
+    level :info
   end
-  return
+  if ! node['minc-toolkit']['force_install'] then
+    return
+  end
 end
 
 case node['platform_family'] 
