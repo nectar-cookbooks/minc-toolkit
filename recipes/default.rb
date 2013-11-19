@@ -53,7 +53,7 @@ end
 # Until the Github version's build has stabilized, use a source tgz 
 # from the BIC "packages" server.
 #
-url = 'http://packages.bic.mni.mcgill.ca/tgz/minc-2.1.10.tar.gz'
+url = node.default['minc-toolkit']['download_url']
 build_dir = '/tmp/minc-build'
 
 directory build_dir do
@@ -83,3 +83,7 @@ bash 'install' do
   code 'make install'
   cwd build_dir
 end
+
+#bash 'remove build dir' do
+#  code "rm -rf #{build_dir}"
+#end
