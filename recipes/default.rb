@@ -36,9 +36,8 @@ if File::exists?("#{bin}/dcm2mnc") then
   return
 end
 
-pf = node['platform_family'] 
-case pf
-when 'rhel'
+case node['platform_family'] 
+when 'rhel', 'fedora'
   deps = [ 'tar', 'gcc-c++', 'make', 'bison', 'flex', 
            'netcdf', 'netcdf-devel', 'hdf5', 'hdf5-devel']
 else 
