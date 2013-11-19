@@ -36,12 +36,13 @@ if File::exists?("#{bin}/dcm2mnc") then
   return
 end
 
-case node['platform_family'] 
+pf = node['platform_family'] 
+case pf
 when 'rhel'
   deps = [ 'tar', 'gcc-c++', 'make', 'bison', 'flex', 
            'netcdf', 'netcdf-devel', 'hdf5', 'hdf5-devel']
 else 
-  raise "Platform not supported"
+  raise "Platform family #{pf} not supported"
 end
 
 deps.each do |pkg|
