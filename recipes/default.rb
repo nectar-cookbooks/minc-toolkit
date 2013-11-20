@@ -56,7 +56,7 @@ end
 # from the BIC "packages" server.
 #
 url = node.default['minc-toolkit']['download_url']
-build_dir = node.default['minc-toolkit']['build_dir'] | '/tmp/minc-build'
+build_dir = node.default['minc-toolkit']['build_dir'] || '/tmp/minc-build'
 
 directory build_dir do
 end
