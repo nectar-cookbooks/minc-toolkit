@@ -71,6 +71,12 @@ bash 'unpack' do
   cwd build_dir
 end
 
+bash 'clean' do
+  code 'make distclean'
+  cwd build_dir
+  only_if { File.exists?("#{build_dir}/Makefile") }
+end
+
 bash 'configure' do
   code "./configure --prefix=#{prefix}"
   cwd build_dir
