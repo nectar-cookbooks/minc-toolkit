@@ -41,7 +41,8 @@ end
 case node['platform_family'] 
 when 'rhel', 'fedora'
   deps = [ 'tar', 'gcc-c++', 'make', 'bison', 'flex', 
-           'netcdf', 'netcdf-devel', 'hdf5', 'hdf5-devel']
+           'netcdf', 'netcdf-devel', 'hdf5', 'hdf5-devel',
+           'zlib', 'zlib-devel']
 else 
   raise "Platform family #{pf} not supported"
 end
