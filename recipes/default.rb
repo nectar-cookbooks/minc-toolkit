@@ -27,7 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  
-prefix = '/usr/local'
+prefix = node.default['minc-toolkit']['prefix'] | '/usr/local'
 bin = "#{prefix}/bin"
 if File::exists?("#{bin}/dcm2mnc") then
   log "Minc tools already installed in #{bin}" do
@@ -56,7 +56,7 @@ end
 # from the BIC "packages" server.
 #
 url = node.default['minc-toolkit']['download_url']
-build_dir = '/tmp/minc-build'
+build_dir = node.default['minc-toolkit']['build_dir'] | '/tmp/minc-build'
 
 directory build_dir do
 end
@@ -86,6 +86,8 @@ bash 'install' do
   cwd build_dir
 end
 
-#bash 'remove build dir' do
-#  code "rm -rf #{build_dir}"
-#end
+if node['minc-toolkit']['clean_after_install'] then
+  bash 'remove build dir' do
+    code "rm -rf #{build_dir}"
+  end
+end
