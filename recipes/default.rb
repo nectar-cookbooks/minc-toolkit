@@ -38,63 +38,65 @@ if File::exists?("#{bin}/dcm2mnc") then
   end
 end
 
-case node['platform_family'] 
+pf = node['platform_family'] 
+case pf
 when 'rhel', 'fedora'
   deps = [ 'tar', 'gcc-c++', 'make', 'bison', 'flex', 
            'netcdf', 'netcdf-devel', 'hdf5', 'hdf5-devel',
            'zlib', 'zlib-devel']
+  build_from_source = true
+when 'debian'
+  # Todo ... it would be nice to have 'build from source' support for 
+  # debian / ubuntu 
+  build_from_source = false
+  pkg = 'minc-tools'
 else 
   raise "Platform family #{pf} not supported"
 end
 
-deps.each do |pkg|
+if ! build_from_source 
   package pkg do
   end
-end 
-
-#
-# Until the Github version's build has stabilized, use a source tgz 
-# from the BIC "packages" server.
-#
-url = node.default['minc-toolkit']['download_url']
-build_dir = node.default['minc-toolkit']['build_dir'] || '/tmp/minc-build'
-
-directory build_dir do
-end
-
-remote_file "#{build_dir}/minc.tar.gz" do
-  source url
-  use_conditional_get true
-end
-
-bash 'unpack' do
-  code 'tar xfz minc.tar.gz --strip-components=1'
-  cwd build_dir
-end
-
-bash 'clean' do
-  code 'make distclean'
-  cwd build_dir
-  only_if { File.exists?("#{build_dir}/Makefile") }
-end
-
-bash 'configure' do
-  code "./configure --prefix=#{prefix}"
-  cwd build_dir
-end
-
-bash 'build' do
-  code 'make'
-  cwd build_dir
-end
- 
-bash 'install' do
-  code 'make install'
-  cwd build_dir
-end
-
-if node['minc-toolkit']['clean_after_install'] then
-  bash 'remove build dir' do
-    code "rm -rf #{build_dir}"
+else
+  deps.each do |pkg|
+    package pkg do
+    end
+  end 
+  
+  #
+  # Until the Github version's build has stabilized, use a source tgz 
+  # from the BIC "packages" server.
+  #
+  url = node.default['minc-toolkit']['download_url']
+  build_dir = node.default['minc-toolkit']['build_dir'] || '/tmp/minc-build'
+  
+  directory build_dir do
+  end
+  
+  remote_file "#{build_dir}/minc.tar.gz" do
+    source url
+    use_conditional_get true
+  end
+  
+  bash 'unpack' do
+    code 'tar xfz minc.tar.gz --strip-components=1'
+    cwd build_dir
+  end
+  
+  bash 'clean' do
+    code 'make distclean'
+    cwd build_dir
+    only_if { File.exists?("#{build_dir}/Makefile") }
+  end
+  
+  bash 'build' do
+    code "./configure --prefix=#{prefix} && make && make install"
+    cwd build_dir
+  end
+  
+  if node['minc-toolkit']['clean_after_install'] then
+    bash 'remove build dir' do
+      code "rm -rf #{build_dir}"
+    end
   end
 end
