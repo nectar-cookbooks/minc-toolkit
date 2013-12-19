@@ -1,8 +1,9 @@
 Overview
 ========
 
-This cookbook downloads, builds and installs the MINC toolkit.  The install
-location is "/usr/local"
+For RHEL and Fedora, this cookbook downloads, builds and installs the MINC 
+toolkit.  The install location is "/usr/local".  For Debian / Ubuntu, we 
+just install the 'minc-tools' package from the standard repos.
 
 Dependencies
 ============
@@ -26,4 +27,4 @@ Note that the build directory needs to be on a partition with enough free space 
 TO_DO List
 ==========
 
-The default behaviour should be to install a package from a repo ... if we know of a suitable one.  Apparently, minc packages are available for Ubuntu.
+Support the "build from source" option for Debian and Ubuntu.
